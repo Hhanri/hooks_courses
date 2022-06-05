@@ -29,12 +29,23 @@ class MyHomePage extends HookWidget {
   const MyHomePage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final dateTime = useStream(getTime());
+    final controller = useTextEditingController();
+    final text = useState('');
+    useEffect(() {
+      controller.addListener(() {
+        text.value = controller.text;
+      });
+    }, [controller]);
     return Scaffold(
-      appBar: AppBar(
-        title: Text(dateTime.data ?? "Home Page"),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(text.value),
+          TextField(
+            controller: controller,
+          )
+        ],
       ),
-      body: Container(),
     );
   }
 }
