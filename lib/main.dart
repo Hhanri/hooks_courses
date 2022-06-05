@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
 void main() {
   runApp(const MyApp());
@@ -18,11 +19,22 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key}) : super(key: key);
 
+Stream<String> getTime() => Stream.periodic(
+  const Duration(seconds: 1),
+  (_) => DateTime.now().toIso8601String()
+);
+
+class MyHomePage extends HookWidget {
+  const MyHomePage({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Container();
+    final dateTime = useStream(getTime());
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(dateTime.data ?? "Home Page"),
+      ),
+      body: Container(),
+    );
   }
 }
